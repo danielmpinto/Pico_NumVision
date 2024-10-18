@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "stdio.h": "c",
+        "ov7670.h": "c",
+        "format.h": "c"
+    },
+    "cmake.buildBeforeRun": true,
+    "cmake.configureOnOpen": true,
+    "cmake.ctest.allowParallelJobs": true,
+    "cmake.parallelJobs": 8,
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
+}
