@@ -34,117 +34,12 @@ const char charmap[] = " .:-=+*#%@";
 
 
 
-#include "hardware/spi.h"
 
-// Definindo os pinos
-#define CS_PIN   17  // Chip Select
-#define DC_PIN   12  // Data/Command
-#define RST_PIN  15  // Reset
-#define SPI_SCK  14  // Clock
-#define SPI_MOSI 13  // Data
 
-// Comandos do ST7735 (Exemplo, ajuste conforme necessário)
-#define ST7735_NOP          0x00
-#define ST7735_SWRESET      0x01
-#define ST7735_SLPOUT       0x11
-#define ST7735_INVOFF       0x20
-#define ST7735_INVON        0x21
-#define ST7735_CASET        0x2A
-#define ST7735_RASET        0x2B
-#define ST7735_RAMWR        0x2C
-#define ST7735_MADCTL       0x36
-#define ST7735_COLMOD       0x3A
-#define ST7735_DISPON       0x29
-
-// Inicializa o SPI 1
-void init_spi() {
-    spi_init(spi1, 1000000); // Inicializa SPI a 1 MHz
-    gpio_set_function(SPI_SCK, GPIO_FUNC_SPI); // Configura SCK para SPI1
-    gpio_set_function(SPI_MOSI, GPIO_FUNC_SPI); // Configura MOSI para SPI1
-    gpio_init(CS_PIN); // Inicializa CS
-    gpio_init(DC_PIN); // Inicializa DC
-    gpio_init(RST_PIN); // Inicializa RST
-
-    gpio_set_dir(CS_PIN, GPIO_OUT); // Configura CS como saída
-    gpio_set_dir(DC_PIN, GPIO_OUT); // Configura DC como saída
-    gpio_set_dir(RST_PIN, GPIO_OUT); // Configura RST como saída
-}
-
-// Envia um comando para o display
-void sendCommand(uint8_t cmd) {
-    gpio_put(CS_PIN, 0); // Ativa o chip select
-    gpio_put(DC_PIN, 0); // Envia comando
-    spi_write_blocking(spi1, &cmd, 1); // Envia o comando
-    gpio_put(CS_PIN, 1); // Desativa o chip select
-}
-
-// Envia dados para o display
-void sendData(uint8_t data) {
-    gpio_put(CS_PIN, 0); // Ativa o chip select
-    gpio_put(DC_PIN, 1); // Envia dados
-    spi_write_blocking(spi1, &data, 1); // Envia os dados
-    gpio_put(CS_PIN, 1); // Desativa o chip select
-}
-
-// Envia um comando seguido de dados
-void sendCommandWithData(uint8_t cmd, uint8_t *data, size_t length) {
-    sendCommand(cmd);
-    gpio_put(CS_PIN, 0); // Ativa o chip select
-    gpio_put(DC_PIN, 1); // Envia dados
-    spi_write_blocking(spi1, data, length); // Envia os dados
-    gpio_put(CS_PIN, 1); // Desativa o chip select
-}
-
-// Inicializa o display
-void initDisplay() {
-    gpio_put(RST_PIN, 1); // Define RST alto
-    sleep_ms(100);
-    gpio_put(RST_PIN, 0); // Define RST baixo
-    sleep_ms(100);
-    gpio_put(RST_PIN, 1); // Define RST alto
-    sleep_ms(100);
-
-    sendCommand(ST7735_SWRESET); // Reinicializa o display
-    sleep_ms(150);
-    sendCommand(ST7735_SLPOUT); // Sai do modo de suspensão
-    sleep_ms(150);
-    sendCommand(ST7735_COLMOD); // Define o formato de cor
-    uint8_t colmod = 0x05; // 16 bits por pixel
-    sendData(colmod);
-    sendCommand(ST7735_MADCTL); // Define a orientação do display
-    uint8_t madctl = 0xC8; // Exemplo de configuração
-    sendData(madctl);
-    sendCommand(ST7735_DISPON); // Liga o display
-}
-
-// Define um pixel no display
-void setPixel(int16_t x, int16_t y, uint16_t color) {
-    if (x < 0 || x >= 128 || y < 0 || y >= 160) return; // Verifica os limites
-
-    // Define a área onde o pixel será desenhado
-    uint8_t col[4] = {0x2A, 0x00, (uint8_t)(x >> 8), (uint8_t)(x & 0xFF)};
-    uint8_t row[4] = {0x2B, 0x00, (uint8_t)(y >> 8), (uint8_t)(y & 0xFF)};
-    sendCommandWithData(ST7735_CASET, col, sizeof(col));
-    sendCommandWithData(ST7735_RASET, row, sizeof(row));
-    
-    // Envia o dado do pixel
-    sendCommand(ST7735_RAMWR);
-    sendData(color >> 8); // Parte alta
-    sendData(color & 0xFF); // Parte baixa
-}
 
 int main() {
     stdio_init_all();
-    init_spi();
-    initDisplay();
-
-    // Desenha um pixel vermelho no centro
-    setPixel(64, 80, 0x0000); // 0xF800 é a cor vermelha em formato RGB565
-
-    while (true) {
-        // Loop principal
-    }
-	// Wait some time for USB serial connection
+    
 	sleep_ms(3000);
 
 	const uint LED_PIN = PICO_DEFAULT_LED_PIN;
