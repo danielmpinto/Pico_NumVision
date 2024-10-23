@@ -13,6 +13,15 @@
 #include "camera/camera.h"
 #include "camera/format.h"
 
+/*
+ * FreeRTOS
+ */
+#include <FreeRTOS.h>
+#include <task.h>
+#include <semphr.h>
+#include <queue.h>
+
+
 #define CAMERA_PIO      pio0
 #define CAMERA_BASE_PIN 10
 #define CAMERA_XCLK_PIN 21
@@ -29,19 +38,8 @@ static inline int __i2c_read_blocking(void *i2c_handle, uint8_t addr, uint8_t *d
 	return i2c_read_blocking((i2c_inst_t *)i2c_handle, addr, dst, len, false);
 }
 
-// From http://www.paulbourke.net/dataformats/asciiart/
-const char charmap[] = " .:-=+*#%@";
 
-
-
-
-
-
-int main() {
-    stdio_init_all();
-    
-	sleep_ms(3000);
-
+void camera_capture(){
 	const uint LED_PIN = PICO_DEFAULT_LED_PIN;
 	gpio_init(LED_PIN);
 	gpio_set_dir(LED_PIN, GPIO_OUT);
@@ -68,7 +66,6 @@ int main() {
 	int ret = camera_init(&camera, &platform);
 	if (ret) {
 		printf("camera_init failed: %d\n", ret);
-		return 1;
 	}
 
 	const uint16_t width = CAMERA_WIDTH_DIV8;
@@ -77,7 +74,7 @@ int main() {
 	struct camera_buffer *buf = camera_buffer_alloc(FORMAT_YUV422, width, height);
 	assert(buf);
 	int frame_id = 0;
-	while (1) {
+	while(true){
 		printf("[%03dx%03d] %04d$", width, height, frame_id);
 		gpio_put(LED_PIN, 1);
 		ret = camera_capture_blocking(&camera, buf, true);
@@ -102,6 +99,21 @@ int main() {
 				frame_id = 0;
 		}
 
-		sleep_ms(5000);
+	vTaskDelay(pdMS_TO_TICKS(5000));
+
+
 	}
+}
+
+
+int main() {
+    stdio_init_all();
+    
+	sleep_ms(3000);
+
+	xTaskCreate(camera_capture, "Camera setup and capture", 4096, NULL, 1, NULL);
+
+	vTaskStartScheduler();
+	
+	while (1) ;
 }
