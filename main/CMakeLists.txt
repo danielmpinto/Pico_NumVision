@@ -1,19 +1,12 @@
 cmake_minimum_required(VERSION 3.12)
-
-
 # rest of your project
-add_executable(pico_numvision
-    main.cpp
+add_executable(camera_example
+    main.c
 )
-
-
-
-# target_include_directories(pico_numvision PRIVATE ${CMAKE_CURRENT_LIST_DIR}/.. include/camera)
+pico_enable_stdio_usb(camera_example 1)
+# target_include_directories(camera_example PRIVATE ${CMAKE_CURRENT_LIST_DIR}/.. include/camera)
 # add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/.. camera)
-target_link_libraries(pico_numvision PRIVATE camera pico_stdlib hardware_i2c hardware_gpio hardware_spi FreeRTOS-Kernel FreeRTOS-Kernel-Heap4 display_st7735) 
-
-
-pico_enable_stdio_usb(pico_numvision 1)
-
+target_link_libraries(camera_example PRIVATE camera pico_stdlib hardware_i2c hardware_gpio)
 # create map/bin/hex/uf2 file in addition to ELF.
-pico_add_extra_outputs(pico_numvision)
+pico_add_extra_outputs(camera_example)
+
