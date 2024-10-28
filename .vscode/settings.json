@@ -2,7 +2,8 @@
     "files.associations": {
         "stdio.h": "c",
         "ov7670.h": "c",
-        "format.h": "c"
+        "format.h": "c",
+        "st7735_tft.hpp": "c"
     },
     "cmake.buildBeforeRun": true,
     "cmake.configureOnOpen": true,

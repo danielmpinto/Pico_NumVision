@@ -22,6 +22,11 @@
 #include <queue.h>
 
 
+/*
+*  Display includes
+*/
+
+
 #define CAMERA_PIO      pio0
 #define CAMERA_BASE_PIN 10
 #define CAMERA_XCLK_PIN 21
