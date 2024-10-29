@@ -49,12 +49,12 @@ target_sources(display_st7735 INTERFACE
 )
 
 target_include_directories(camera INTERFACE
-	${CMAKE_CURRENT_LIST_DIR}/include
+	${CMAKE_CURRENT_LIST_DIR}/include/camera
 	${CMAKE_CURRENT_LIST_DIR}/freertos
 )
 
 target_include_directories(display_st7735 INTERFACE 
-	${CMAKE_CURRENT_LIST_DIR}/include
+	${CMAKE_CURRENT_LIST_DIR}/include/st7735
 	${CMAKE_CURRENT_LIST_DIR}/freertos
 )
 

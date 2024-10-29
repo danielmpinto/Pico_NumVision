@@ -10,7 +10,7 @@ add_executable(pico_numvision
 
 # target_include_directories(pico_numvision PRIVATE ${CMAKE_CURRENT_LIST_DIR}/.. include/camera)
 # add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/.. camera)
-target_link_libraries(pico_numvision PRIVATE camera pico_stdlib hardware_i2c hardware_gpio hardware_spi FreeRTOS-Kernel FreeRTOS-Kernel-Heap4 display_st7735) 
+target_link_libraries(pico_numvision PRIVATE camera pico_stdlib hardware_i2c hardware_gpio hardware_spi FreeRTOS-Kernel FreeRTOS-Kernel-Heap4 display_st7735 hardware_i2c) 
 
 
 pico_enable_stdio_usb(pico_numvision 1)

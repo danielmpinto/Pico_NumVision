@@ -11,10 +11,15 @@
 #include "hardware/dma.h"
 #include "hardware/pio.h"
 
-#include "camera/ov7670.h"
+#include "ov7670.h"
 
-#define CAMERA_WIDTH_DIV8  320
-#define CAMERA_HEIGHT_DIV8 240
+
+#ifdef __cplusplus
+extern "C" { 
+#endif
+
+#define CAMERA_WIDTH_DIV8  80	
+#define CAMERA_HEIGHT_DIV8 60
 
 #define CAMERA_MAX_N_PLANES 3
 
@@ -135,4 +140,7 @@ struct camera_buffer *camera_buffer_alloc(uint32_t format, uint16_t width, uint1
 // Free a buffer previously allocated by camera_buffer_alloc.
 void camera_buffer_free(struct camera_buffer *buf);
 
+#ifdef __cplusplus
+}
+#endif
 #endif /* __CAMERA_H__ */

@@ -3,7 +3,8 @@
         "stdio.h": "c",
         "ov7670.h": "c",
         "format.h": "c",
-        "st7735_tft.hpp": "c"
+        "st7735_tft.hpp": "c",
+        "camera.pio.h": "c"
     },
     "cmake.buildBeforeRun": true,
     "cmake.configureOnOpen": true,

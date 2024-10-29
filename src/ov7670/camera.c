@@ -12,9 +12,9 @@
 #include "hardware/irq.h"
 #include "hardware/pio.h"
 
-#include "camera/camera.h"
-#include "camera/format.h"
-#include "camera/ov7670.h"
+#include "camera.h"
+#include "format.h"
+#include "ov7670.h"
 
 #include "camera.pio.h"
 
@@ -257,7 +257,7 @@ int camera_configure(struct camera *camera, uint32_t format, uint16_t width, uin
 	struct camera_platform_config *platform = camera->driver_host.platform;
 
 	OV7670_set_format(platform, ov7670_colorspace_from_format(format));
-	OV7670_set_size(platform, OV7670_SIZE_DIV2);
+	OV7670_set_size(platform, OV7670_SIZE_DIV8);
 
 	camera->config.sm_cfgs[CAMERA_PIO_FRAME_SM] =
 		camera_pio_get_frame_sm_config(platform->pio, CAMERA_PIO_FRAME_SM, camera->frame_offset, platform->base_pin);

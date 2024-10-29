@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#include "camera/format.h"
+#include "format.h"
 
 uint8_t format_num_planes(uint32_t format)
 {
